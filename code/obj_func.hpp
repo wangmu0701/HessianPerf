@@ -1,6 +1,13 @@
-#define NUM_IND 20000
+#include <cstdlib>
+
+#define NUM_IND 20
 
 #define K_NNZ 3
+
+
+#define PRINT_RESULTS
+
+#define DEF_TOL (0.0000001)
 
 #define EXP_1 1.0+x[i]*x[r]
 #define EXP_2 EXP_1+EXP_1

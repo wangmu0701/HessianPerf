@@ -28,7 +28,6 @@
 // Define this macro will print out all results
 // #define PRINT_RESULTS
 
-#define def_tol (0.000001)
 
 // Basically, one can implement his own objective function by implementing
 // the following 3 functions:
@@ -46,7 +45,7 @@ void compare_matrix(int n, double** H, int nnz, unsigned int *r, unsigned int *c
   }
   for(i=0;i<n;i++){
     for(j=0;j<n;j++){
-      if (fabs(H[i][j])>def_tol){
+      if (fabs(H[i][j])>DEF_TOL){
         printf("WRONG!\n");
         exit(-1);
         return;

@@ -60,7 +60,7 @@ int main() {
   int** tind;
   double* values;
   // adjoints : dep[0].order[1]
-  for (int order = 1; order <=DERIVATIVE_ORDER; order++) {
+  for (int order = 1; order <=2; order++) {
     tensor->get_internal_coordinate_list(0, order, &size, &tind, &values);
     for (int i = 0; i < size; i++) {
       std::cout << "T[ " << tind[i][0];
