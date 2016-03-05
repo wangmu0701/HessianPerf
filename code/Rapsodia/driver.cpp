@@ -4,6 +4,8 @@
 // level directory of the Rapsodia distribution           *
 //*********************************************************
 #include <vector>
+#include <iostream>
+#include <fstream>
 #include <stdio.h>
 #include <cmath>
 #include <cassert>
@@ -21,8 +23,23 @@ int main() {
   double myEps=1.0E-10;
   unsigned short  n,o;
   n=NUM_IND;
-  o=2;	
-  HessianIndex T(n); 
+  o=2;
+  int nnz;
+  std::ifstream fin;
+  fin.open("pattern.out");
+  fin >> nnz;
+  std::cout << "nnz = " << nnz << std::endl;
+  unsigned int* rnnz = new unsigned int[nnz];
+  unsigned int* cnnz = new unsigned int[nnz];
+  for (int i = 0; i < nnz; i++) {
+    fin >> rnnz[i];
+    fin >> cnnz[i];
+  }
+  HessianIndex T(n, nnz, rnnz, cnnz); 
+  delete[] rnnz;
+  delete[] cnnz;
+  fin.close();
+
   int dirs=T.getDirectionCount();
   std::cout << "Number of directions: " << dirs << std::endl;
 
@@ -60,7 +77,6 @@ int main() {
   }
   T.setTaylorCoefficients(TaylorCoefficients);
   // harvest the compressedTensor
-  int nnz = 0;
   std::vector<double> gradient = T.getGradient();
   std::vector<unsigned int> rind = T.getRind();
   std::vector<unsigned int> cind = T.getCind();

@@ -71,6 +71,13 @@ int main() {
     }
   }
 #endif
+  std::ofstream fout;
+  fout.open("./../Rapsodia/pattern.out");
+  fout << size << std::endl;
+  for (int i = 0; i < size; i++) {
+    fout << tind[i][0] << " " << tind[i][1] << std::endl;
+  }
+  fout.close();
   printf("eval_func time elapsed = %.10f\n", func_time);
   printf("total time elapsed = %.10f\n", time_elapsed);
 }
