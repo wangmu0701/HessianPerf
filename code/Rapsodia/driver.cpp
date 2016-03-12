@@ -81,8 +81,9 @@ int main() {
   std::vector<unsigned int> rind = T.getRind();
   std::vector<unsigned int> cind = T.getCind();
   std::vector<double> hessian = T.getHessian();
-  std::cout<< "G.size() = " << gradient.size() << std::endl;
+
 #ifdef PRINT_RESULTS
+  std::cout<< "G.size() = " << gradient.size() << std::endl;
   for (int i = 0; i < gradient.size(); i++) {
     if (fabs(gradient[i]) > DEF_TOL) {
       printf("A[%d] = %.5lf\n", i, gradient[i]);

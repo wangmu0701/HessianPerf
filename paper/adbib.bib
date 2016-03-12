@@ -1,0 +1,450 @@
+% the Andreas Griewank's book
+@book{griewank2008evaluating,
+  title={Evaluating derivatives: principles and techniques of algorithmic differentiation},
+  author={Griewank, Andreas and Walther, Andrea},
+  year={2008},
+  publisher={Siam}
+}
+
+% Uwe Naumann's book
+@book{naumann2012art,
+  title={The art of differentiating computer programs: an introduction to algorithmic differentiation},
+  author={Naumann, Uwe},
+  volume={24},
+  year={2012},
+  publisher={Siam}
+}
+
+% The ‚Äúfirst‚Äù(?) paper about reverse Hessian.
+@article{christianson1992automatic,
+  title={Automatic Hessians by reverse accumulation},
+  author={Christianson, Bruce},
+  journal={IMA Journal of Numerical Analysis},
+  volume={12},
+  number={2},
+  pages={135--150},
+  year={1992},
+  publisher={Oxford University Press}
+}
+
+%checkpointing-old
+@article{griewank2000algorithm,
+  title={Algorithm 799: revolve: an implementation of checkpointing for the reverse or adjoint mode of computational differentiation},
+  author={Griewank, Andreas and Walther, Andrea},
+  journal={ACM Transactions on Mathematical Software (TOMS)},
+  volume={26},
+  number={1},
+  pages={19--45},
+  year={2000},
+  publisher={ACM}
+}
+%checkpointing
+@article{stumm2010new,
+  title={New algorithms for optimal online checkpointing},
+  author={Stumm, Philipp and Walther, Andrea},
+  journal={SIAM Journal on Scientific Computing},
+  volume={32},
+  number={2},
+  pages={836--854},
+  year={2010},
+  publisher={SIAM}
+}
+
+% An very old paper about high order derivatives
+% The idea is to apply forward mode over forward mode over forward mode
+@article{wexler1988algorithm,
+  title={An algorithm for exact evaluation of multivariate functions and their derivatives to any order},
+  author={Wexler, Anthony S},
+  journal={Computational Statistics \& Data Analysis},
+  volume={6},
+  number={1},
+  pages={1--6},
+  year={1988},
+  publisher={Elsevier}
+}
+
+
+% The famous paper by Barak, talk about how to compute Hv
+% The defined R{} operator is the first order forward mode.
+% Apply the R{} operator on backward prorogation will give Hv.
+@article{pearlmutter1994fast,
+  title={Fast exact multiplication by the Hessian},
+  author={Pearlmutter, Barak A},
+  journal={Neural computation},
+  volume={6},
+  number={1},
+  pages={147--160},
+  year={1994},
+  publisher={MIT Press}
+}
+
+% Sparse Hessian
+@article{walther2008computing,
+  title={Computing sparse Hessians with automatic differentiation},
+  author={Walther, Andrea},
+  journal={ACM Transactions on Mathematical Software (TOMS)},
+  volume={34},
+  number={1},
+  pages={3},
+  year={2008},
+  publisher={ACM}
+}
+% Evaluating Hessian with ColPack-ADOLC
+@article{gebremedhin2009efficient,
+  title={Efficient computation of sparse Hessians using coloring and automatic differentiation},
+  author={Gebremedhin, Assefaw H and Tarafdar, Arijit and Pothen, Alex and Walther, Andrea},
+  journal={INFORMS Journal on Computing},
+  volume={21},
+  number={2},
+  pages={209--223},
+  year={2009},
+  publisher={INFORMS}
+}
+% Sparsity pattern for Hessian
+@incollection{walther2012efficient,
+  title={On the efficient computation of sparsity patterns for Hessians},
+  author={Walther, Andrea},
+  booktitle={Recent Advances in Algorithmic Differentiation},
+  pages={139--149},
+  year={2012},
+  publisher={Springer}
+}
+
+% As the title, the paper talk about how to evaluate higher derivative tensor 
+% through propagation Taylor coefficients.
+% The high order algorithm implemented in ADOL-C and Rapsodia.
+@article{griewank2000evaluating,
+  title={Evaluating higher derivative tensors by forward propagation of univariate Taylor series},
+  author={Griewank, Andreas and Utke, Jean and Walther, Andrea},
+  journal={Mathematics of Computation of the American Mathematical Society},
+  volume={69},
+  number={231},
+  pages={1117--1130},
+  year={2000}
+}
+
+% Relatively Äúrecent paper, published in 2014, but the preprint version goes back to 2009.
+% Cross derivatives is something where no variables is differentiated twice.
+% That is all variable is unique. There are total $2^n$ cross derivatives.
+% And the idea is quite similar to the high order forward mode.
+@article{griewank2014automatic,
+  title={Automatic evaluations of cross-derivatives},
+  author={Griewank, Andreas and Lehmann, Lutz and Leovey, Hernan and Zilberman, Marat},
+  journal={Mathematics of Computation},
+  volume={83},
+  number={285},
+  pages={251--274},
+  year={2014}
+}
+
+%Cosy Infinity, high order forward mode.
+@article{berz1991algorithms,
+  title={Algorithms for higher order automatic differentiation in many variables with applications to beam physics},
+  author={Berz, Martin},
+  journal={Automatic Differentiation of Algorithms: Theory, Implementation and Application, SIAM, Philadelphia},
+  pages={147},
+  year={1991}
+}
+
+% Summarizes the properties of forward mode AD and give it a functor form.
+@inproceedings{elliott2009beautiful,
+  title={Beautiful differentiation},
+  author={Elliott, Conal M},
+  booktitle={ACM Sigplan Notices},
+  volume={44},
+  number={9},
+  pages={191--202},
+  year={2009},
+  organization={ACM}
+}
+
+% Gower and Mello‚Äôs Hessian Paper
+@article{gower2012new,
+  title={A new framework for the computation of Hessians},
+  author={Gower, RM and Mello, MP},
+  journal={Optimization Methods and Software},
+  volume={27},
+  number={2},
+  pages={251--273},
+  year={2012},
+  publisher={Taylor \& Francis}
+}
+
+@article{gower2016higher,
+  title={Higher-order reverse automatic differentiation with emphasis on the third-order},
+  author={Gower, Robert M and Gower, Artur L},
+  journal={Mathematical Programming},
+  volume={155},
+  number={1-2},
+  pages={81--103},
+  year={2016},
+  publisher={Springer}
+}
+
+% Bell numbers
+@article{gardner1978bells,
+  title={BELLS-VERSATILE NUMBERS THAT CAN COUNT PARTITIONS OF A SET, PRIMES AND EVEN RHYMES},
+  author={Gardner, Martin},
+  journal={Scientific American},
+  volume={238},
+  number={5},
+  pages={24},
+  year={1978},
+  publisher={SCI AMERICAN INC 415 MADISON AVE, NEW YORK, NY 10017}
+}
+
+% Bell number growth rate
+@book{de1970asymptotic,
+  title={Asymptotic methods in analysis},
+  author={De Bruijn, Nicolaas Govert},
+  volume={4},
+  year={1970},
+  publisher={Courier Corporation}
+}
+
+% Baur-Strassen theorem
+@article{baur1983complexity,
+  title={The complexity of partial derivatives},
+  author={Baur, Walter and Strassen, Volker},
+  journal={Theoretical computer science},
+  volume={22},
+  number={3},
+  pages={317--330},
+  year={1983},
+  publisher={Elsevier}
+}
+
+% Paul Hovland's phd thesis
+@phdthesis{hovland1997automatic,
+  title={Automatic differentiation of parallel programs},
+  author={Hovland, Paul Dennis},
+  year={1997},
+  school={University of Illinois at Urbana-Champaign}
+}
+
+% High Order chain rule
+@article{ma2009higher,
+  title={Higher chain formula proved by combinatorics},
+  author={Ma, Tsoy-Wo},
+  journal={The electronic journal of combinatorics},
+  volume={16},
+  number={1},
+  pages={N21},
+  year={2009}
+}
+
+@article{heimbach20153,
+  title={3.13 Application of derivative code in climate modeling},
+  author={Heimbach, Patrick},
+  journal={Adjoint Methods in Computational Science, Engineering, and Finance},
+  pages={14},
+  year={2015}
+}
+
+@article{faure1999extension,
+  title={Extension of Odyss{\'e}e to the MPI library-Reverse mode},
+  author={Faure, Christ{\`e}le and Dutto, Patrick},
+  year={1999}
+}
+
+@inproceedings{utke2009toward,
+  title={Toward adjoinable MPI},
+  author={Utke, Jean and Hasco{\"e}t, Laurent and Heimbach, Patrick and Hill, Christopher and Hovland, Paul and Naumann, Uwe},
+  booktitle={Parallel \& Distributed Processing, 2009. IPDPS 2009. IEEE International Symposium on},
+  pages={1--8},
+  year={2009},
+  organization={IEEE}
+}
+
+@incollection{bischof2008parallel,
+  title={Parallel reverse mode automatic differentiation for OpenMP programs with ADOL-C},
+  author={Bischof, Christian and Guertler, Niels and Kowarz, Andreas and Walther, Andrea},
+  booktitle={Advances in Automatic Differentiation},
+  pages={163--173},
+  year={2008},
+  publisher={Springer}
+}
+
+@book{forster2014algorithmic,
+  title={Algorithmic Differentiation of Pragma-Defined Parallel Regions: Differentiating Computer Programs Containing OpenMP},
+  author={F{\"o}rster, Michael},
+  year={2014},
+  publisher={Springer}
+}
+
+@article{wang2016capitalizing,
+  title={Capitalizing on live variables: new algorithms for efficient Hessian computation via automatic differentiation},
+  author={Wang, Mu and Gebremedhin, Assefaw and Pothen, Alex},
+  journal={Mathematical Programming Computation},
+  pages={1--41},
+  year={2016},
+  publisher={Springer}
+}
+
+%ADOL-C
+@inproceedings{walther2009getting,
+  title={Getting Started with ADOL-C.},
+  author={Walther, Andrea and Griewank, Andreas},
+  booktitle={Combinatorial scientific computing},
+  pages={181--202},
+  year={2009}
+}
+
+%ColPack
+@article{gebremedhin2013colpack,
+  title={ColPack: Software for graph coloring and related problems in scientific computing},
+  author={Gebremedhin, Assefaw H and Nguyen, Duc and Patwary, Md Mostofa Ali and Pothen, Alex},
+  journal={ACM Transactions on Mathematical Software (TOMS)},
+  volume={40},
+  number={1},
+  pages={1},
+  year={2013},
+  publisher={ACM}
+}
+
+%Rapsodia
+@article{charpentier2009fast,
+  title={Fast higher-order derivative tensors with Rapsodia},
+  author={Charpentier, Isabelle and Utke, Jean},
+  journal={Optimization Methods \& Software},
+  volume={24},
+  number={1},
+  pages={1--14},
+  year={2009},
+  publisher={Taylor \& Francis}
+}
+%%%%%%%%%%%%%%%%%%%
+%%% APPLICATIONS  BELOW %%%
+%%%%%%%%%%%%%%%%%%%
+
+@inproceedings{gulati2009framework,
+  title={A framework for planning comfortable and customizable motion of an assistive mobile robot},
+  author={Gulati, Shilpa and Jhurani, Chetan and Kuipers, Benjamin and Longoria, Raul},
+  booktitle={Intelligent Robots and Systems, 2009. IROS 2009. IEEE/RSJ International Conference on},
+  pages={4253--4260},
+  year={2009},
+  organization={IEEE}
+}
+% Hinton's paper on back-propagation in neural network (9000+ cites)
+@article{rumelhart1988learning,
+  title={Learning representations by back-propagating errors},
+  author={Rumelhart, David E and Hinton, Geoffrey E and Williams, Ronald J},
+  journal={Cognitive modeling},
+  volume={5},
+  pages={3},
+  year={1988}
+}
+
+% Named as "Hessian-free" optimization.
+% But stated that curvature information is important.
+% So use Hessian-Vector product to get curvature information.
+% Or even (Approximate Hessian)-Vector product.
+@inproceedings{martens2010deep,
+  title={Deep learning via Hessian-free optimization},
+  author={Martens, James},
+  booktitle={Proceedings of the 27th International Conference on Machine Learning (ICML-10)},
+  pages={735--742},
+  year={2010}
+}
+
+
+% Sample Hessian. Using CG to solve Hd = J to get a descent direction. When solving:
+% only compute Hessian-Vector on a small sample set
+@article{byrd2011use,
+  title={On the use of stochastic hessian information in optimization methods for machine learning},
+  author={Byrd, Richard H and Chin, Gillian M and Neveitt, Will and Nocedal, Jorge},
+  journal={SIAM Journal on Optimization},
+  volume={21},
+  number={3},
+  pages={977--995},
+  year={2011},
+  publisher={SIAM}
+}
+
+% old paper as the title
+@article{thacker1989role,
+  title={The role of the Hessian matrix in fitting models to measurements},
+  author={Thacker, William Carlisle},
+  journal={Journal of Geophysical Research: Oceans (1978--2012)},
+  volume={94},
+  number={C5},
+  pages={6177--6196},
+  year={1989},
+  publisher={Wiley Online Library}
+}
+
+@book{nocedal2006numerical,
+  title={Numerical optimization},
+  author={Nocedal, Jorge and Wright, Stephen},
+  year={2006},
+  publisher={Springer Science \& Business Media}
+}
+
+% Control under uncertainty condition? 1000+ cites
+@article{levant2003higher,
+  title={Higher-order sliding modes, differentiation and output-feedback control},
+  author={Levant, Arie},
+  journal={International journal of Control},
+  volume={76},
+  number={9-10},
+  pages={924--941},
+  year={2003},
+  publisher={Taylor \& Francis}
+}
+
+% Chebyshev-Halley method, generalized Newton's method
+@article{gutierrez1997family,
+  title={A family of Chebyshev-Halley type methods in Banach spaces},
+  author={Gutierrez, Jose Manuel and Hernandez, Miguel A},
+  journal={Bulletin of the Australian Mathematical Society},
+  volume={55},
+  number={01},
+  pages={113--130},
+  year={1997},
+  publisher={Cambridge Univ Press}
+}
+% QCD
+@article{karsch2011towards,
+  title={Towards finite density QCD with Taylor expansions},
+  author={Karsch, Frithjof and Schaefer, B-J and Wagner, Mathias and Wambach, Jochen},
+  journal={Physics Letters B},
+  volume={698},
+  number={3},
+  pages={256--264},
+  year={2011},
+  publisher={Elsevier}
+}
+
+@article{guckenheimer2000computing,
+  title={Computing periodic orbits and their bifurcations with automatic differentiation},
+  author={Guckenheimer, John and Meloon, Brian},
+  journal={SIAM Journal on Scientific Computing},
+  volume={22},
+  number={3},
+  pages={951--985},
+  year={2000},
+  publisher={SIAM}
+}
+
+@article{kariwala2012automatic,
+  title={Automatic differentiation-based quadrature method of moments for solving population balance equations},
+  author={Kariwala, Vinay and Cao, Yi and K Nagy, Zoltan},
+  journal={AIChE Journal},
+  volume={58},
+  number={3},
+  pages={842--854},
+  year={2012},
+  publisher={Wiley Online Library}
+}
+
+% parallel AD
+@article{heimbach2005efficient,
+  title={An efficient exact adjoint of the parallel MIT general circulation model, generated via automatic differentiation},
+  author={Heimbach, Patrick and Hill, Chris and Giering, Ralf},
+  journal={Future Generation Computer Systems},
+  volume={21},
+  number={8},
+  pages={1356--1371},
+  year={2005},
+  publisher={Elsevier}
+}

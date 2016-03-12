@@ -1,5 +1,6 @@
 #include <memory>
 #include <iostream>
+#include <fstream>
 #include <sys/time.h>
 
 #include "reversead/reversead.hpp"
@@ -54,7 +55,7 @@ int main() {
   gettimeofday(&tv2, NULL);
   time_elapsed = (tv2.tv_sec - tv1.tv_sec) + (double)(tv2.tv_usec - tv1.tv_usec) / 1000000;
 
-#ifdef PRINT_RESULTS
+
   // retrieve results
   int size;
   int** tind;
@@ -62,22 +63,45 @@ int main() {
   // adjoints : dep[0].order[1]
   for (int order = 1; order <=2; order++) {
     tensor->get_internal_coordinate_list(0, order, &size, &tind, &values);
+#ifdef PRINT_RESULTS
     for (int i = 0; i < size; i++) {
+     if (fabs(values[i]) > DEF_TOL) {
       std::cout << "T[ " << tind[i][0];
       for (int j = 1; j < order; j++) {
         std::cout << " " << tind[i][j]; 
       }
       std::cout << " ] = " << values[i] << std::endl;
+     }
     }
-  }
 #endif
-  std::ofstream fout;
-  fout.open("./../Rapsodia/pattern.out");
-  fout << size << std::endl;
-  for (int i = 0; i < size; i++) {
-    fout << tind[i][0] << " " << tind[i][1] << std::endl;
   }
+
+  std::ofstream fout;
+  int count = 0;
+  fout.open("./../Rapsodia/pattern.out");
+  for (int i = 0; i < size; i++) {
+   if (fabs(values[i]) > DEF_TOL) {
+    if (tind[i][0] != tind[i][1]) {
+      count++;
+    }
+   }
+  }
+  fout << count << std::endl;
+  for (int i = 0; i < size; i++) {
+   if (fabs(values[i]) > DEF_TOL) {
+    if (tind[i][0] != tind[i][1]) {
+      fout << tind[i][0] << " " << tind[i][1] << std::endl;
+    }
+   }
+  }
+  
   fout.close();
   printf("eval_func time elapsed = %.10f\n", func_time);
   printf("total time elapsed = %.10f\n", time_elapsed);
+  printf("Directions for Rapsodia = %d\n", n + count);
+  std::ofstream dout;
+  dout.open("./../Rapsodia/Direction.mk");
+  dout << "Directions="<<n+count<<std::endl;
+  dout << "Slices="<<((n+count)/200 + 10)<<std::endl;
+  dout.close();
 }

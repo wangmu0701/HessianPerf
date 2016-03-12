@@ -6,6 +6,7 @@
 RAPSODIAHOME = $(HOME)/packages/Rapsodia
 include $(RAPSODIAHOME)/MakeDefs.mk
 include $(RAPSODIAHOME)/MakeRules.mk
+include Direction.mk
 
 default: driver
 	./$^
@@ -23,15 +24,15 @@ driver:  $(OBJS) $(GEN_DIR)/libRapsodia.a ./../obj_func.hpp
 	$(CXX) $(CXXFLAGS) $(IPATH) -o $@ $^
 
 $(GEN_DIR)/libRapsodia.a: FORCE
-	$(RAPSODIAHOME)/Generator/generate.py -d 400 -s 20 -o 3 -c $(GEN_DIR)
+	$(RAPSODIAHOME)/Generator/generate.py -d $(Directions) -s $(Slices) -o 3 -c $(GEN_DIR)
 	cd $(GEN_DIR) && $(MAKE)
 
 FORCE:
 
 clean: 
-	rm -rf $(GEN_DIR) *.o driver
+	rm -rf $(GEN_DIR) *.o driver Direction.mk pattern.out
 
 .PHONY: default clean
 
 adrfunc.cpp:$(GEN_DIR)/libRapsodia.a
-driver.cpp:$(GEN_DIR)/libRapsodia.a
+driver.cpp:$(GEN_DIR)/libRapsodia.a ./../obj_func.hpp

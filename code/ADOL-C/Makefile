@@ -5,10 +5,13 @@ ADOLCPATH=$(HOME)/packages/adolc_edge
 ADOLCLIBS=$(ADOLCPATH)/lib64
 ADOLCINCL=$(ADOLCPATH)/include
 
-all: adolc
+all: direct indirect
 
-adolc: adolc.cpp ./../obj_func.hpp
-	$(CXX) $(CXXFLAGS) -I$(ADOLCINCL) adolc.cpp -o $@ -L$(ADOLCLIBS) -ladolc
+direct: adolc.cpp ./../obj_func.hpp
+	$(CXX) -D DIRECT $(CXXFLAGS) -I$(ADOLCINCL) adolc.cpp -o $@ -L$(ADOLCLIBS) -ladolc
+
+indirect: adolc.cpp ./../obj_func.hpp
+	$(CXX) -D INDIRECT $(CXXFLAGS) -I$(ADOLCINCL) adolc.cpp -o $@ -L$(ADOLCLIBS) -ladolc
 
 clean:
-	rm *.o *.tap adolc
+	rm *.o *.tap direct indirect

@@ -16,7 +16,7 @@
 
 
 // Pick one method from the following to evaluate the sparse Hessian
-#define LIVARH
+//#define LIVARH
 //#define LIVARHACC
 //#define DIRECT
 //#define INDIRECT

@@ -1,5 +1,8 @@
 *.hpp
+*.swp
 HessianPerf.aux
 HessianPerf.log
 HessianPerf.pdf
+HessianPerf.bbl
+HessianPerf.blg
 HessianPerf.synctex.gz
