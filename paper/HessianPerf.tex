@@ -22,7 +22,7 @@ Several Automatic Differentiation (AD)-based Hessian evaluation algorithms have 
 \section*{Algorithms}
 
 We study three different approaches for Hessian evaluation. The first approach in turn has two variants, and so in total we consider four algorithms. In all four algorithms, 
-the sparsity available in the final Hessian is exploited; that is, computing with and storing zero entries is avoided. All four of the algorithms compared are implemented with the operator overloading parameter. 
+the sparsity available in the final Hessian is exploited; that is, computing with and storing zero entries is avoided. All four of the algorithms compared are implemented within the operator overloading paradigm. 
 
 {\bf (i) Compression-based methods. }
 The first two methods we study are based on the {\em forward-over-reverse mode}, or {\em Second-Order-Adjoint-Mode (SOAM)}, of Automatic Differentiation~\cite{griewank2008evaluating, naumann2012art}. Each run of a forward-over-reverse mode gives a Hessian-vector product $Hv$. Thus a trivial approach to get the entire Hessian matrix is to run the forward-over-reverse mode $n$ times, where $n$ is the number of columns in the Hessian and each run evaluates the $i$-th column of the Hessian, $He_i$. This approach is clearly not efficient  when the Hessian is sparse.  Therefore a compression-based method is used instead \cite{gebremedhin2009efficient}. 
@@ -34,7 +34,7 @@ The number of columns $p$ in the seed matrix is exactly the number of colors nee
 In this manner, only $p$ Hessian-vector products, instead of $n \gg p$ Hessan-vector products, is needed to obtain a compressed version of the Hessian. The desired Hessian is then obtained via a suitable recovery step.  
 
 Depending on how the recovery step is performed, two different kinds of coloring are needed in the determination of the seed matrix. If the recovery is direct (no further arithmetic is involved in obtaining entries of the original Hessian),  {\em star} coloring is the needed coloring;
-and if the recovery is indirect (entries of the original Hessian are obtained via substitutions), {\em acyclic} coloring is needed. In what follows, we refer to these two approaches  as {\tt Direct} and {\tt Indirect} respectively. We use the implementations in {\tt ADOL-C} \cite{walther2009getting} and {\tt ColPack} \cite{gebremedhin2013colpack}, in which {\tt ADOL-C} is responsible for the routines corresponding to computing the sparsity pattern and evaluating the compressed Hessian, and {\tt COlPack} is responsible for the routines  corresponding to coloring the adjacency graph and recovery the Hessian from the compressed representation.
+and if the recovery is indirect (entries of the original Hessian are obtained via substitutions), {\em acyclic} coloring is needed. In what follows, we refer to these two approaches  as {\tt Direct} and {\tt Indirect} respectively. We use the implementations in {\tt ADOL-C} \cite{walther2009getting} and {\tt ColPack} \cite{gebremedhin2013colpack}, in which {\tt ADOL-C} is responsible for the routines corresponding to computing the sparsity pattern and evaluating the compressed Hessian, and {\tt ColPack} is responsible for the routines  corresponding to coloring the adjacency graph and recovery the Hessian from the compressed representation.
 
 {\bf (ii) Taylor coefficient based method. } 
 The third Hessian evaluation method  we study  corresponds to evaluating the Hessian by propagating a family of second order Taylor coefficients~\cite{griewank2000evaluating}. 
@@ -78,9 +78,7 @@ z * 2.0 * 0.5, \\
 sin(asin(z)). \\
 \end{cases}
 \end{eqnarray*}
-$x_{i_j}$ are $s$ duplicated variables for $x_i$ to make the size of live variable set at least to be $s$. And by changing $k$, we can change the complexity of the function while keep the function value unchanged.
-
-
+The variables $x_{i_j}$ are $s$ duplicated variables for $x_i$ to make the size of the live variable set at least equal to $s$. And by changing $k$, we can change the complexity of the function while keeping the function value unchanged.
 
 
 \section*{Results}
