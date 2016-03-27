@@ -27,46 +27,47 @@
 \author[1]{Mu Wang}
 \author[2]{Assefaw Gebremedhin}
 \author[1]{Alex Pothen}
-\affil[1]{Department of Computer Science, Purdue University, \{wang970, apothen\}@purdue.edu}
-\affil[2]{School of Electrical Engineering and Computer Science, Washington State University, assefaw@eecs.wsu.edu}
-\date{}
+\affil[1]{Department of Computer Science, Purdue University}
+\affil[2]{School of Electrical Engineering and Computer Science, Washington State University}
+\vspace{-15mm}
+\date{Emails:  \texttt{wang970@purdue.edu}, \texttt{assefaw@eecs.wsu.edu},
+\texttt{apothen@purdue.edu}}
 \maketitle
 
 \section*{Introduction}
 The second order derivative of a scalar function, i.e, the Hessian matrix, plays 
 an important role in many applications. 
-Several Automatic Differentiation (AD)-based Hessian evaluation algorithms have been proposed and implemented in the literature. While the high-level differences between the algorithms is generally understood, the detailed behavior of the algorithms and their performance characterization with respect to the structure and complexity of the computer code  representing the function to be differentiated has not been systematically studied and understood. In this work, we design a synthetic function that allows us to change the structural properties of the function by tuning parameters, and we use the designed function to study the performance of four different Hessian computation algorithms and the sensitivity of the performance to variations in those structural properties.
+Several Automatic Differentiation (AD)-based Hessian evaluation algorithms have been proposed and implemented in the literature. While the high-level difference between the algorithms is generally understood, the detailed behavior of the algorithms and their performance characterization with respect to the structure and complexity of the computer code  representing the function to be differentiated has not been systematically studied and understood. In this work, we design a synthetic function that allows us to change the structural properties of the function by tuning parameters, and we use the designed function to study the performance of four different Hessian computation algorithms and the sensitivity of the performance to variations in those structural properties.
 
 \section*{Algorithms}
 
 We study three different approaches for Hessian evaluation. The first approach in turn has two variants, and so in total we consider four algorithms. In all four algorithms, 
 the sparsity available in the final Hessian is exploited; that is, computing with and storing zero entries is avoided. All four of the algorithms compared are implemented within the operator overloading paradigm. 
 
-{\bf (i) Compression-based methods. }
-The first two methods we study are based on the {\em forward-over-reverse mode}, or {\em Second-Order-Adjoint-Mode (SOAM)}, of Automatic Differentiation~\cite{griewank2008evaluating, naumann2012art}. Each run of a forward-over-reverse mode gives a Hessian-vector product $Hv$. Thus a trivial approach to get the entire Hessian matrix is to run the forward-over-reverse mode $n$ times, where $n$ is the number of columns in the Hessian and each run evaluates the $i$-th column of the Hessian, $He_i$. This approach is clearly not efficient  when the Hessian is sparse.  Therefore a compression-based method is used instead \cite{gebremedhin2009efficient}. 
+\paragraph{(i) Compression-based methods}
+The first two methods we study are based on the {\em forward-over-reverse mode}, or {\em Second-Order-Adjoint-Mode (SOAM)}, of Automatic Differentiation~\cite{griewank2008evaluating, naumann2012art}. Each run of a forward-over-reverse mode gives a Hessian-vector product $Hv$. Thus a trivial approach to get the entire Hessian matrix is to run the forward-over-reverse mode $n$ times, where $n$ is the number of columns in the Hessian, so that each run evaluates the $i$-th column of the Hessian, $He_i$. This approach is clearly not efficient  when the Hessian is sparse.  Therefore a compression-based method is used instead \cite{gebremedhin2009efficient}. 
 
 The idea behind the compression-based approach is to determine an $n$ by $p$ seed matrix $S$
-that encodes the set columns of the Hessian that can be ``compressed" together and evaluated via one Hessian-vector product. The seed matrix is typically obtained by
+that encodes the set columns of the Hessian that can be ``compressed'' together and evaluated via one Hessian-vector product. The seed matrix is typically obtained by
 coloring the graph associated with the sparsity pattern of the Hessian. 
 The number of columns $p$ in the seed matrix is exactly the number of colors needed. 
 In this manner, only $p$ Hessian-vector products, instead of $n \gg p$ Hessan-vector products, is needed to obtain a compressed version of the Hessian. The desired Hessian is then obtained via a suitable recovery step.  
 
 Depending on how the recovery step is performed, two different kinds of coloring are needed in the determination of the seed matrix. If the recovery is direct (no further arithmetic is involved in obtaining entries of the original Hessian),  {\em star} coloring is the needed coloring;
-and if the recovery is indirect (entries of the original Hessian are obtained via substitutions), {\em acyclic} coloring is needed. In what follows, we refer to these two approaches  as {\tt Direct} and {\tt Indirect} respectively. We use the implementations in {\tt ADOL-C} \cite{walther2009getting} and {\tt ColPack} \cite{gebremedhin2013colpack}, in which {\tt ADOL-C} is responsible for the routines corresponding to computing the sparsity pattern and evaluating the compressed Hessian, and {\tt ColPack} is responsible for the routines  corresponding to coloring the adjacency graph and recovery the Hessian from the compressed representation.
+and if the recovery is indirect (entries of the original Hessian are obtained via substitutions), {\em acyclic} coloring is needed. In what follows, we refer to these two compression-based approaches  as {\tt Direct} and {\tt Indirect}, respectively. We use the implementations in {\tt ADOL-C} \cite{walther2009getting} and {\tt ColPack} \cite{gebremedhin2013colpack}, where {\tt ADOL-C} has the routines corresponding to sparsity pattern detection and computation of the compressed Hessian, and {\tt ColPack} has the routines  corresponding to coloring of the adjacency graph and recovery of the Hessian from the compressed representation.
 
-{\bf (ii) Taylor coefficient based method. } 
+\paragraph{(ii) Taylor coefficient based method} 
 The third Hessian evaluation method  we study  corresponds to evaluating the Hessian by propagating a family of second order Taylor coefficients~\cite{griewank2000evaluating}. 
 By assigning pre-calculated initial values for each Taylor series, each entry in the Hessian matrix  can be determined by a linear combination of the final Taylor coefficients. Each initial value is called a {\em direction}.
-%The complexity of evaluating the Hessian using this method is proportional to a combination of $n^2$ and the complexity of the objective function.
-The complexity of evaluating of the final Hessian using this method is $O(n^2 \cdot Eval(f))$, where $Eval(f)$ is the complexity of evaluating the objective function.
-The complexity can be made proportional to $nnz$ and the complexity of the objective function, where $nnz$ is the number of non-zeros in the final Hessian matrix, by only evaluating those non-zero entries.
+The complexity of evaluating of the final Hessian using this method is $O(n^2 \cdot eval(f))$, where $eval(f)$ is the temporal complexity of (time needed for) evaluating the objective function.
+The complexity can be reduced to $O(nnz \cdot eval(f))$, where $nnz$ is the number of non-zeros in the final Hessian matrix, if the sparsity pattern is known apriori.
 %The complexity of this method is $O(n^2)$. And if we know the sparsity pattern of the final Hessian matrix, the complexity can be reduced to $O(nnz)$ where $nnz$ is the number of non-zeros in the final Hessian matrix by only evaluating those non-zero entries.
-We use the implementation in {\tt Rapsodia}~\cite{charpentier2009fast} and provide a patch which allows {\tt Rapsodia} to only evaluate the non-zero entries in the Hessian matrix with pre-determined sparsity pattern information. For the latter information, we use the sparsity pattern computed by {\tt ADOL-C}. The design philosophy of {\tt Rapsodia} is to use flat code to evaluate the Taylor coefficients for all directions. Given the number of directions, {\tt Rapsodia} explicitly generates this flat code. As we will show, when the number of directions is large, the generated code is very large and compilation takes huge amounts of time (several hours even for a moderate size problem), making the method infeasible. 
+We use the implementation in {\tt Rapsodia}~\cite{charpentier2009fast} and provide a patch which allows {\tt Rapsodia} to only evaluate the non-zero entries in the Hessian matrix for a given sparsity pattern. To obtain the latter information, we use the sparsity pattern computed by {\tt ADOL-C}. The design philosophy of {\tt Rapsodia} is to use flat code to evaluate the Taylor coefficients for all directions. Given the number of directions, {\tt Rapsodia} explicitly generates this flat code. As we will show, when the number of directions is large, the generated code is very large and compilation takes huge amounts of time (several hours even for a moderate size problem), making the method infeasible. 
 
-{\bf (iii) Live variable based method. }
+\paragraph{(iii) Live variable based method}
 The last method we study is second order reverse mode based on the {\em live variables} approach \cite{wang2016capitalizing}. The key idea in the algorithm is to extend a useful invariant in reverse mode AD into the second order. In particular, the insight is that, at each point, the intermediate state of the reverse mode algorithm is the derivative of an equivalent function with respect to the live variable set at that point. The equivalent function is defined by the single assignment codes processed in earlier steps. 
 %The complexity of this method is proportional to the size of live variable sets and the complexity of the objective function. 
-The complexity of this method is $O(s \cdot Eval(f))$, where $s$ is the maximum size of live variable sets during the evaluation of the function $f$.
+The complexity of this method is $O(s \cdot eval(f))$, where $s$ is the maximum size of live variable sets during the evaluation of the function $f$ \cite{wang2016capitalizing}.
 We implement this algorithm in a tool we called {\tt ReverseAD} and use this implementation in the comparison.
 
 \section*{Design of test cases}
@@ -74,14 +75,14 @@ We implement this algorithm in a tool we called {\tt ReverseAD} and use this imp
 We construct testcases specially designed to enable in-depth empirical analysis of {\em structural factors} that determine the performance of the  different Hessian algorithms. 
 To construct the testcases, we wrote a simple code that works as follows. 
 
-Assume there are $n$ independent variables $x_i, 1 \le i \le n$, let $y$ be the dependent variable, and let the average number of nonzeros per row, $\bar{\rho}$, be fixed. 
-In a loop over the $n$ rows, in each row $i$, we randomly pick $\frac{\bar{\rho}}{2}$ column indices $r_j$ and create a nonzero entry in the location $H(i,r_{i_j})$. During the creation, we make $s$ copies of $x_i$ as $x_{i_j}, 1 \le j \le s$ to ensure that the size of live variable sets during the function evaluation is at least $s$ for most of the time. We also let $x_i$ to pass through $k$ identity transformations to make sure the test function $y$ covers a variety of kinds of operators and elementary functions. This also provides us with a way to control the complexity of the function evaluation $Eval(f)$. Each identity transformation is randomly chosen among six pre-determined forms. 
+Suppose we have $n$ independent variables $x_i, 1 \le i \le n$, and let $y$ be the dependent variable. Let the average number of nonzeros per row in the Hessian, $\rho$, be fixed. 
+We loop over the $n$ rows, and in each row $i$, we randomly pick $\frac{\rho}{2}$ column indices $r_j$ and create a nonzero entry in the location $H(i,r_{j})$. During the creation, we make $s$ copies of $x_i$ (as $x_{i_j}, 1 \le j \le s$) to ensure that the size of live variable sets during the function evaluation is at least $s$ for most of the time. We also let $x_i$ pass through $k$ compositions of identity functions---transformations that involve computation without changing value---to make it possible for the test function $y$ to cover a variety of kinds of operators and elementary functions. This also provides us with a way to control the complexity of the function evaluation $eval(f)$. Each identity function is randomly chosen from six pre-determined forms. 
 
 All random numbers are generated by a deterministic random number generator. Thus we can reproduce the function evaluations by giving the same initial seed.
 
 With this setting, we can control the number of rows in the Hessian matrix ($n$), the density/sparsity of the Hessian ($\rho$), the complexity of the function evaluation ($k$), and the size of live variable sets during the function evaluation ($s$).
 
-{\bf Details of The Synthetic Function. }
+\paragraph{Details of The Synthetic Function}
 The synthetic function has the following mathematical form:
 \begin{center}
 \begin{tabular}{l c c}
@@ -101,11 +102,11 @@ $t_i = \sum\limits_{j=1}^{\rho/2} x_{r_j} + \sum\limits_{j=1}^{s} x_{i_j}$ & &\\
 &\\
 \end{tabular}
 \end{center}
-Clearly all the six $ID(w)$ functions are identity transformations. The variables $x_{i_j}$ are $s$ duplicated variables for $x_i$, designed to make the size of the live variable set at least equal to $s$.  By varying $k$, we correspondingly vary the complexity of the function $Eval(f)$ while keeping the function value unchanged.
-
+The display at the right shows the six identity functions $ID(w)$ we used; the reader can verify that each of these functions returns as output what it is given as input. The variables $x_{i_j}$ are the $s$ duplicated variables for $x_i$, designed to make the size of the live variable set at least equal to $s$.  By varying $k$, we correspondingly vary the complexity of the function $eval(f)$ while keeping the function value unchanged.
 
 \section*{Results}
-All the tests for the results reported here are performed on a Quad Core 2.5 GHz Intel I5-2400Sprocessor with 8 GB Memory and the code is compiled with {\tt gcc/g++ 4.8.2}. 
+All the tests for the results reported here are performed on a Quad Core 2.5 GHz Intel I5-2400S
+processor with 8 GB Memory and the code is compiled with {\tt gcc/g++ 4.8.2}. 
 
 \paragraph{(a) General Runtime} 
 We first use some small tests to get a general sense of the performance of the algorithms. We set $\rho = 6$, $k = 30$ and $s = 30$. 
@@ -130,10 +131,10 @@ $3,000$ & 11,989 & 3.671 & 3.258 & 26.808 & 1.207\\
 \end{table}
 
 \paragraph{(b) Function Complexity} 
-Our goal here is to see how the performance changes as the function complexity is varied.
-We set $n = 20,000$, $\rho = 6$, $s = 30$, and vary $k$ from $20$ to $60$. 
+Our goal here is to see how the performance changes as the function complexity ($eval(f)$) 
+is varied. We set $n = 20,000$, $\rho = 6$, $s = 30$, and vary $k$ from $20$ to $60$. 
 The results we obtained are summarized in Table 2.
-We found that the runtime of {\tt Direct} and {\tt Indirect} increases super-linearly with increase in the function complexity. Further, we found that that more than $90\%$ (or $99\%$ in the last two tests) of the time is spent in the sparsity pattern detection procedure, see Figure 1. It is likely that our synthetic function is among the ``worst-case" instances for the current sparsity pattern detection procedure implemented in ADOL-C.  Finally, we see that the runtime of {\tt ReverseAD} is within the same order of the function complexity.
+We found that the runtime of {\tt Direct} and {\tt Indirect} increases super-linearly with increase in the function complexity. Further, we found that more than $90\%$ (or $99\%$ in the last two tests) of the time is spent in the sparsity pattern detection phase, see Figure 1. It is likely that our synthetic function is among the ``worst-case" instances for the current sparsity pattern detection procedure implemented in ADOL-C.  Finally, we see that the runtime of {\tt ReverseAD} is within the same order of the function complexity.
 \begin{minipage}{\textwidth}
   \begin{minipage}[b]{0.45\textwidth}
     \centering
@@ -163,7 +164,7 @@ $k$ & {\tt Direct} & {\tt Indirect} & {\tt ReverseAD} \\
 
 \paragraph{(c) Size of Live Variables} 
 Here we want to see how the performance changes as we vary the size of the live variable set.
-We fix $n = 20,000$, $\rho = 6$, $k = 30$ and vary $s$ from $20$ to $60$. The results, summarized in Table~\ref{tab:live}, suggest that performance of {\tt ReverseAD} is much more sensitive to the size of live variable set than the other two algorithms. This is in accordance with our expectation and the complexity analysis of the algorithm.
+We fix $n = 20,000$, $\rho = 6$, $k = 30$ and vary $s$ from $20$ to $60$. The results, summarized in Table~\ref{tab:live}, suggest that performance of {\tt ReverseAD} is much more sensitive to the size of live variable set than the other two algorithms. This is in accordance with our expectation and the complexity analysis of the algorithm \cite{wang2016capitalizing}.
 \begin{table*}[htbp]
 \begin{center}
 \begin{tabular}{ | c | r | r | r | r | r |}
@@ -215,7 +216,7 @@ Finally, we see that {\tt ReverseAD} takes more time when the density of the Hes
 \end{minipage}
 
 \section*{Conclusion}
-We compared the performance of four different Hessian evaluating algorithms under various systematically constructed input scenarios. We found that the approach in {\tt Rapsodia} is feasible only when evaluating derivatives for function with a few number of independent variables. We also found that the bottleneck in the compression based methods is mainly the sparsity pattern step. The {\tt ReverseAD} approach is more stable and efficient approach in most cases. 
+We compared the performance of four different Hessian evaluating algorithms under various systematically constructed input scenarios. We found that the approach in {\tt Rapsodia} is feasible only when evaluating derivatives for function with a few number of independent variables. We also found that the bottleneck in the compression based methods is mainly the sparsity pattern step. The {\tt ReverseAD} approach is the more stable and efficient approach in most cases. 
 
 
 \bibliographystyle{abbrv}
