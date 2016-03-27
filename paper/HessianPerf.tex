@@ -23,12 +23,13 @@
 
 \begin{document}
 
-\title{Performance Evaluation of Automatic Differentiation Algorithms for Hessian Computation}
-\author[1]{Mu Wang \thanks{wang970@purdue.edu}}
-\author[2]{Assefaw Gebremedhin \thanks{assefaw@eecs.wsu.edu}}
-\author[1]{Alex Pothen \thanks{apothen@purdue.edu}}
-\affil[1]{Department of Computer Science, Purdue University}
-\affil[2]{School of Electrical Engineering and Computer Science, Washington State University}
+\title{Performance Evaluation of Automatic Differentiation Algorithms \\ for Hessian Computation}
+\author[1]{Mu Wang}
+\author[2]{Assefaw Gebremedhin}
+\author[1]{Alex Pothen}
+\affil[1]{Department of Computer Science, Purdue University, \{wang970, apothen\}@purdue.edu}
+\affil[2]{School of Electrical Engineering and Computer Science, Washington State University, assefaw@eecs.wsu.edu}
+\date{}
 \maketitle
 
 \section*{Introduction}
@@ -56,20 +57,25 @@ and if the recovery is indirect (entries of the original Hessian are obtained vi
 {\bf (ii) Taylor coefficient based method. } 
 The third Hessian evaluation method  we study  corresponds to evaluating the Hessian by propagating a family of second order Taylor coefficients~\cite{griewank2000evaluating}. 
 By assigning pre-calculated initial values for each Taylor series, each entry in the Hessian matrix  can be determined by a linear combination of the final Taylor coefficients. Each initial value is called a {\em direction}.
-The complexity of evaluating the Hessian using this method is proportional to a combination of $n^2$ and the complexity of the objective function. The complexity can be made proportional to $nnz$ and the complexity of the objective function, where $nnz$ is the number of non-zeros in the final Hessian matrix, by only evaluating those non-zero entries.
+%The complexity of evaluating the Hessian using this method is proportional to a combination of $n^2$ and the complexity of the objective function.
+The complexity of evaluating of the final Hessian using this method is $O(n^2 \cdot Eval(f))$, where $Eval(f)$ is the complexity of evaluating the objective function.
+The complexity can be made proportional to $nnz$ and the complexity of the objective function, where $nnz$ is the number of non-zeros in the final Hessian matrix, by only evaluating those non-zero entries.
 %The complexity of this method is $O(n^2)$. And if we know the sparsity pattern of the final Hessian matrix, the complexity can be reduced to $O(nnz)$ where $nnz$ is the number of non-zeros in the final Hessian matrix by only evaluating those non-zero entries.
 We use the implementation in {\tt Rapsodia}~\cite{charpentier2009fast} and provide a patch which allows {\tt Rapsodia} to only evaluate the non-zero entries in the Hessian matrix with pre-determined sparsity pattern information. For the latter information, we use the sparsity pattern computed by {\tt ADOL-C}. The design philosophy of {\tt Rapsodia} is to use flat code to evaluate the Taylor coefficients for all directions. Given the number of directions, {\tt Rapsodia} explicitly generates this flat code. As we will show, when the number of directions is large, the generated code is very large and compilation takes huge amounts of time (several hours even for a moderate size problem), making the method infeasible. 
 
 {\bf (iii) Live variable based method. }
-The last method we study is second order reverse mode based on the {\em live variables} approach \cite{wang2016capitalizing}. The key idea in the algorithm is to extend a useful invariant in reverse mode AD into the second order. In particular, the insight is that, at each point, the intermediate state of the reverse mode algorithm is the derivative of an equivalent function with respect to the live variable set at that point. The equivalent function is defined by the single assignment codes processed in earlier steps. The complexity of this method is proportional to the size of live variable sets and the complexity of the objective function. We implement this algorithm in a tool we called {\tt ReverseAD} and use this implementation in the comparison.
+The last method we study is second order reverse mode based on the {\em live variables} approach \cite{wang2016capitalizing}. The key idea in the algorithm is to extend a useful invariant in reverse mode AD into the second order. In particular, the insight is that, at each point, the intermediate state of the reverse mode algorithm is the derivative of an equivalent function with respect to the live variable set at that point. The equivalent function is defined by the single assignment codes processed in earlier steps. 
+%The complexity of this method is proportional to the size of live variable sets and the complexity of the objective function. 
+The complexity of this method is $O(s \cdot Eval(f))$, where $s$ is the maximum size of live variable sets during the evaluation of the function $f$.
+We implement this algorithm in a tool we called {\tt ReverseAD} and use this implementation in the comparison.
 
 \section*{Design of test cases}
 
 We construct testcases specially designed to enable in-depth empirical analysis of {\em structural factors} that determine the performance of the  different Hessian algorithms. 
 To construct the testcases, we wrote a simple code that works as follows. 
 
-Let the number of rows in the target Hessian matrix be $n$, and let the average number of nonzeros per row, $\bar{\rho}$, be fixed.
-In a loop over the $n$ rows, we randomly pick $\frac{\bar{\rho}}{2}$ column indices $j$ and create a nonzero entry in the location $H(i,j)$. During the creation, we duplicate $s$ copies of $x[i]$ to ensure that the size of live variable sets during the function evaluation is $s$ for most of the time. We also let $x[i]$ to pass through $k$ identity functions to make sure the test function covers a variety of kinds of operators and elementary functions. This also provides us with a way to control the complexity of the function evaluation. Each identity function is randomly chosen among six pre-determined forms. 
+Assume there are $n$ independent variables $x_i, 1 \le i \le n$, let $y$ be the dependent variable, and let the average number of nonzeros per row, $\bar{\rho}$, be fixed. 
+In a loop over the $n$ rows, in each row $i$, we randomly pick $\frac{\bar{\rho}}{2}$ column indices $r_j$ and create a nonzero entry in the location $H(i,r_{i_j})$. During the creation, we make $s$ copies of $x_i$ as $x_{i_j}, 1 \le j \le s$ to ensure that the size of live variable sets during the function evaluation is at least $s$ for most of the time. We also let $x_i$ to pass through $k$ identity transformations to make sure the test function $y$ covers a variety of kinds of operators and elementary functions. This also provides us with a way to control the complexity of the function evaluation $Eval(f)$. Each identity transformation is randomly chosen among six pre-determined forms. 
 
 All random numbers are generated by a deterministic random number generator. Thus we can reproduce the function evaluations by giving the same initial seed.
 
@@ -79,27 +85,27 @@ With this setting, we can control the number of rows in the Hessian matrix ($n$)
 The synthetic function has the following mathematical form:
 \begin{center}
 \begin{tabular}{l c c}
-& & \multirow{7}{*} {$ID(z) = 
+& & \multirow{7}{*} {$ID(w) = 
 \begin{cases}
-\sqrt{z * z}, \\
-2.0 + z - 2.0, \\
-z * 2.0 * 0.5, \\
-\log \exp(z), \\
-1.0 / (1.0 / z), \\
-sin(asin(z)). \\
+\sqrt{w * w}, \\
+2.0 + w - 2.0, \\
+w * 2.0 * 0.5, \\
+\log (\exp(w)), \\
+1.0 / (1.0 / w), \\
+sin(asin(w)). \\
 \end{cases}$} \\
-$y = \sum\limits_{i=1}^{n} \sum\limits_{j=1}^{\rho/2} z_i * t_i$ & & \\
-$z_i = ID_k \circ \cdots \circ ID_1 (x_i), 1 \le i \le n$ & & \\
-$t_i = \sum\limits_{j=1}^{\rho/2} x_{r_j} + \sum\limits_{j=1}^{s} x_{i_j}, x_{i_j} = x_i$ & &\\
+$y = \sum\limits_{i=1}^{n}  z_i * t_i$ & & \\
+$z_i = ID_k \circ \cdots \circ ID_1 (x_i)$ & & \\
+$t_i = \sum\limits_{j=1}^{\rho/2} x_{r_j} + \sum\limits_{j=1}^{s} x_{i_j}$ & &\\
 &\\
 &\\
 \end{tabular}
 \end{center}
-One can see that all $ID_j$ are identity functions. The variables $x_{i_j}$ are $s$ duplicated variables for $x_i$, designed to make the size of the live variable set at least equal to $s$.  By varying $k$, we correspondingly vary the complexity of the function while keeping the function value unchanged.
+Clearly all the six $ID(w)$ functions are identity transformations. The variables $x_{i_j}$ are $s$ duplicated variables for $x_i$, designed to make the size of the live variable set at least equal to $s$.  By varying $k$, we correspondingly vary the complexity of the function $Eval(f)$ while keeping the function value unchanged.
 
 
 \section*{Results}
-All the tests for the results reported here are performed on a XXX computer with XXX memory and the code is compiled with xxx with xxx option. 
+All the tests for the results reported here are performed on a Quad Core 2.5 GHz Intel I5-2400Sprocessor with 8 GB Memory and the code is compiled with {\tt gcc/g++ 4.8.2}. 
 
 \paragraph{(a) General Runtime} 
 We first use some small tests to get a general sense of the performance of the algorithms. We set $\rho = 6$, $k = 30$ and $s = 30$. 
