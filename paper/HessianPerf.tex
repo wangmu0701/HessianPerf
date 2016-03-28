@@ -1,4 +1,6 @@
-\documentclass[11pt, a4paper, english]{article}
+\documentclass[10pt, a4paper, english]{article}
+\usepackage[margin=1.5cm]{geometry}
+
 %\documentclass[11pt, twocolumn]{article}
 %\documentclass[final,leqno,onefignum,onetabnum]{siamart}
 
@@ -17,9 +19,9 @@
 \usepackage{multirow}
 \usepackage{authblk}
 
-\linespread{1.0}
-\setlength{\textfloatsep}{0.1cm}
-\addtolength{\parskip}{-0.5mm}
+%\linespread{1.0}
+%\setlength{\textfloatsep}{0.1cm}
+%\addtolength{\parskip}{-0.5mm}
 
 \begin{document}
 
@@ -135,6 +137,7 @@ Our goal here is to see how the performance changes as the function complexity (
 is varied. We set $n = 20,000$, $\rho = 6$, $s = 30$, and vary $k$ from $20$ to $60$. 
 The results we obtained are summarized in Table 2.
 We found that the runtime of {\tt Direct} and {\tt Indirect} increases super-linearly with increase in the function complexity. Further, we found that more than $90\%$ (or $99\%$ in the last two tests) of the time is spent in the sparsity pattern detection phase, see Figure 1. It is likely that our synthetic function is among the ``worst-case" instances for the current sparsity pattern detection procedure implemented in ADOL-C.  Finally, we see that the runtime of {\tt ReverseAD} is within the same order of the function complexity.
+
 \begin{minipage}{\textwidth}
   \begin{minipage}[b]{0.45\textwidth}
     \centering
